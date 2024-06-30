@@ -1,0 +1,57 @@
+﻿@model IEnumerable<TaskModel>
+@{
+    ViewData["Title"] = "Tasks";
+}
+
+<h1>Tasks</h1>
+
+<p>
+    <a href="@Url.Action("Create")" class="btn btn-primary">Create New Task</a>
+</p>
+
+<form asp-controller="Tasks" asp-action="Index" method="get">
+    <div class="row">
+        <div class="col">
+            <label>Status:</label>
+            <select name="status" class="form-control">
+                <option value="">All</option>
+                <option value="Incomplete" selected=@(ViewBag.Status == "Incomplete" ? true : false)>Incomplete</option>
+                <option value="Complete" selected="@(ViewBag.Status == "Complete" ? true : false)">Complete</option>
+            </select>
+        </div>
+        <div class="col">
+            <label>Due Date:</label>
+            <input type="date" name="dueDate" class="form-control" value="@ViewBag.DueDate" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary float-end mt-3">Apply Filters</button>
+    <a href="@Url.Action("Index", "Tasks")" class="btn btn-secondary float-end mx-2 mt-3">Reset Filters</a>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody mt-3>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                <td>@Html.DisplayFor(modelItem => item.DueDate)</td>
+                <td>@(item.IsComplete ? "Complete" : "Incomplete")</td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-warning">Edit</a> |
+                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-info">Details</a> |
+                    <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger">Delete</a> |
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
